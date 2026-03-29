@@ -21,7 +21,7 @@ int install_fortunes () {
 	ut32 i;
 	for (i = 0; fortunes[i]; i++) {
 		char ffname[256];	//fortune file name
-		snprintf (ffname, 256, "fortunes.%s", fortunes[i]);
+		snprintf (ffname, 256, "%s.txt", fortunes[i]);
 		char *path = r_file_new (".", "fortunes", ffname, NULL);
 		if (!path) {
 			eprintf ("allocation failed\n");
@@ -52,7 +52,7 @@ int uninstall_fortunes () {
 	ut32 i;
 	for (i = 0; fortunes[i]; i++) {
 		char ffname[256];	//fortune file name
-		snprintf (ffname, 256, "fortunes.%s", fortunes[i]);
+		snprintf (ffname, 256, "%s.txt", fortunes[i]);
 		char *path = r_file_new (fortune_dir, ffname, NULL);
 		if (!path) {
 			eprintf ("allocation failed\n");

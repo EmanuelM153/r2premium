@@ -10,8 +10,10 @@ ut8 magic[] = { 0x48, 0xf0, 0x23, 0x6d, 0x7d, 0xdc, 0x5e, 1, 0xc1, 0x0b, 0x7c,
 	0x12, 0xb1, 0x70, 0xd9, 0xa8, 0xf8, 0x17, 0xd6, 0xf9, 0xb2, 0xba, 0xed,
 	0xb9, 0xb6, 0xd0, 0x9c, 0x2c, 0xd3, 0xa5, 0x25, 0xb6, 0xab, 0x9a, 0x2e, 0xb4 };
 
-static int r_cmd_r2premium_call(void *user, const char *input) {
-	RCore *core = (RCore *)user;
+static bool r_cmd_r2premium_call(RCorePluginSession *cps, const char *input) {
+	RCore *core = (RCore *) cps->core;
+	RCons *cons = (RCons *) core->cons;
+
 	if (!core) {
 		return false;
 	}
@@ -22,35 +24,35 @@ static int r_cmd_r2premium_call(void *user, const char *input) {
 		r_str_argv_free (argv);
 		return false;
 	}
-	RHash *ctx = r_hash_new (true, R_HASH_SHA384);
-	if (ctx) {
+	RHash *hash = r_hash_new (true, R_HASH_SHA384);
+	if (hash) {
 		ut32 i;
 		for (i = 1; i < argc; i++) {
-			r_hash_calculate (ctx, R_HASH_SHA384, argv[i], strlen (argv[i]));
-			if (!memcmp (ctx->digest, magic, sizeof (magic) / sizeof(ut8))) {
+			r_hash_calculate (hash, R_HASH_SHA384, argv[i], strlen (argv[i]));
+			if (!memcmp (hash->digest, magic, sizeof (magic) / sizeof(ut8))) {
 				pnl = pnl * 2;
 			}
 		}
-		r_hash_free (ctx);
+		r_hash_free (hash);
 	}
-	r_cons_print ("8");
-	r_cons_flush ();
+	r_cons_print (cons, "8");
+	r_cons_flush (cons);
 	do {
 		r_sys_usleep (PNUS);
-		r_cons_print ("=");
-		r_cons_flush ();
+		r_cons_print (cons, "=");
+		r_cons_flush (cons);
 	} while (--pnl);
-	r_cons_print ("D ");
+	r_cons_print (cons, "D ");
 	pnl = 3;
 	do {
 		r_sys_usleep (PNUS);
-		r_cons_print ("~");
-		r_cons_flush ();
+		r_cons_print (cons, "~");
+		r_cons_flush (cons);
 	} while (--pnl);
 	r_sys_usleep (PNUS);
-	r_cons_print ("\n");
+	r_cons_print (cons, "\n");
 	r_sys_usleep (PNUS);
-	r_cons_flush ();
+	r_cons_flush (cons);
 beach:
 	r_str_argv_free (argv);
 	return true;
