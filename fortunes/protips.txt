@@ -1,4 +1,4 @@
-hardcode everything 
+hardcode everything
 do repeat yourself
 you probably don’t need that
 optimise early, it’s fun
@@ -33,3 +33,4 @@ try and refactor it, then lose all your unsaved work in a kernel panic, it reall
 replace a hard problem with a much harder problem
 what would forth do?
 ask an expert in something other than radare2
+type xyzzy to return to libc
